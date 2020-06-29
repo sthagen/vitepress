@@ -1,14 +1,28 @@
 <template>
-  <div class="theme-container">
-    <h1>{{ $site.title }}</h1>
-    <p>{{ $site.description }}</p>
-    <Content/>
+  <div class="theme">
+    <header>
+      <NavBar />
+    </header>
+    <aside>
+      <SideBar />
+    </aside>
+    <main>
+      <Page />
+    </main>
   </div>
-  <Debug/>
+  <Debug />
 </template>
 
-<style>
-.theme-container {
-  font-family: Arial, Helvetica, sans-serif;
+<script>
+import NavBar from './components/NavBar.vue'
+import SideBar from './components/SideBar.vue'
+import Page from './components/Page.vue'
+
+export default {
+  components: {
+    NavBar,
+    SideBar,
+    Page
+  }
 }
-</style>
+</script>

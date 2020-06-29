@@ -6,7 +6,6 @@ import { pageDataSymbol } from './composables/pageData'
 import { Content } from './components/Content'
 import Debug from './components/Debug.vue'
 import Theme from '/@theme/index'
-import { hot } from 'vite/hmr'
 import { inBrowser, pathToFile } from './utils'
 
 const NotFound = Theme.NotFound || (() => '404 Not Found')
@@ -21,9 +20,9 @@ export function createApp() {
     useUpdateHead(pageDataRef)
   }
 
-  if (__DEV__ && inBrowser) {
+  if (import.meta.hot) {
     // hot reload pageData
-    hot.on('vitepress:pageData', (data) => {
+    import.meta.hot!.on('vitepress:pageData', (data) => {
       if (
         data.path.replace(/(\bindex)?\.md$/, '') ===
         location.pathname.replace(/(\bindex)?\.html$/, '')
@@ -67,15 +66,19 @@ export function createApp() {
     }
   }, NotFound)
 
-  const app = __DEV__
-    ? createClientApp(Theme.Layout)
-    : createSSRApp(Theme.Layout)
+  const app =
+    process.env.NODE_ENV === 'production'
+      ? createSSRApp(Theme.Layout)
+      : createClientApp(Theme.Layout)
 
   app.provide(RouterSymbol, router)
   app.provide(pageDataSymbol, pageDataRef)
 
   app.component('Content', Content)
-  app.component('Debug', __DEV__ ? Debug : () => null)
+  app.component(
+    'Debug',
+    process.env.NODE_ENV === 'production' ? () => null : Debug
+  )
 
   Object.defineProperties(app.config.globalProperties, {
     $site: {
@@ -86,6 +89,11 @@ export function createApp() {
     $page: {
       get() {
         return pageDataRef.value
+      }
+    },
+    $theme: {
+      get() {
+        return siteDataRef.value.themeConfig
       }
     }
   })
