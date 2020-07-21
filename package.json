@@ -1,6 +1,6 @@
 {
   "name": "vitepress",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "",
   "main": "dist/node/index.js",
   "types": "index.d.ts",
@@ -31,7 +31,7 @@
     "dev-client": "tsc -w -p src/client",
     "dev-client-copy": "node scripts/watchAndCopy",
     "dev-node": "tsc -w -p src/node",
-    "build": "rm -rf dist && tsc -p src/client && tsc -p src/node && node scripts/copy",
+    "build": "rimraf -rf dist && tsc -p src/client && tsc -p src/node && node scripts/copy",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "prepublishOnly": "yarn build && yarn changelog",
     "postpublish": "git add CHANGELOG.md && git commit -m 'chore: changelog [ci skip]'"
@@ -53,8 +53,8 @@
   "author": "Evan You",
   "license": "MIT",
   "dependencies": {
-    "@vue/compiler-sfc": "^3.0.0-beta.15",
-    "@vue/server-renderer": "^3.0.0-beta.15",
+    "@vue/compiler-sfc": "^3.0.0-beta.24",
+    "@vue/server-renderer": "^3.0.0-beta.24",
     "debug": "^4.1.1",
     "diacritics": "^1.3.0",
     "escape-html": "^1.0.3",
@@ -70,8 +70,8 @@
     "minimist": "^1.2.5",
     "prismjs": "^1.20.0",
     "slash": "^3.0.0",
-    "vite": "^1.0.0-beta.1",
-    "vue": "^3.0.0-beta.15"
+    "vite": "^1.0.0-beta.12",
+    "vue": "^3.0.0-beta.24"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.1.0",
@@ -84,6 +84,7 @@
     "lint-staged": "^10.2.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
     "typescript": "^3.8.3",
     "yorkie": "^2.0.0"
   }
