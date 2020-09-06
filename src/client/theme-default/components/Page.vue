@@ -1,14 +1,22 @@
 <template>
   <div class="content">
     <Content />
+    <NextAndPrevLinks />
   </div>
 </template>
 
+<script>
+import NextAndPrevLinks from './NextAndPrevLinks.vue'
+export default {
+  components:{ NextAndPrevLinks }
+}
+</script>
+
 <style>
 .content {
-  max-width: 46rem;
-  margin: 0px auto;
-  padding: 1rem 2rem;
+  margin: 0 auto;
+  padding: 0.025rem 2.5rem 2rem;
+  max-width: 50rem;
 }
 
 .content a {
