@@ -1,9 +1,13 @@
 <template>
   <NavBarLinks class="show-mobile" />
 
+  <slot name="top" />
+
   <ul class="sidebar">
     <SideBarItem v-for="item of items" :item="item" />
   </ul>
+
+  <slot name="bottom" />
 </template>
 
 <script src="./SideBar"></script>
@@ -54,7 +58,7 @@
 }
 
 .sidebar-items .sidebar-link {
-  padding: .35rem 1rem .35rem 2rem;
+  padding: 0.35rem 1rem 0.35rem 2rem;
   line-height: 1.4;
   font-size: 0.95em;
   font-weight: 400;
@@ -71,8 +75,8 @@
 .sidebar-link {
   display: block;
   margin: 0;
-  border-left: .25rem solid transparent;
-  padding: .35rem 1.5rem .35rem 1.25rem;
+  border-left: 0.25rem solid transparent;
+  padding: 0.35rem 1.5rem 0.35rem 1.25rem;
   line-height: 1.7;
   font-size: 1.05em;
   font-weight: 700;
@@ -80,7 +84,7 @@
 }
 
 a.sidebar-link {
-  transition: color .15s ease;
+  transition: color 0.15s ease;
 }
 
 a.sidebar-link:hover {

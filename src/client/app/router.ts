@@ -26,7 +26,8 @@ export function createRouter(
   loadComponent: (route: Route) => Component | Promise<Component>,
   fallbackComponent?: Component
 ): Router {
-  const route = reactive(getDefaultRoute())
+  // TODO: the cast shouldn't be necessary
+  const route = reactive(getDefaultRoute()) as Route
   const inBrowser = typeof window !== 'undefined'
 
   function go(href?: string) {
@@ -35,7 +36,7 @@ export function createRouter(
     const url = new URL(href, fakeHost)
     if (!url.pathname.endsWith('/') && !url.pathname.endsWith('.html')) {
       url.pathname += '.html'
-      href = url.href
+      href = url.pathname + url.search + url.hash
     }
     if (inBrowser) {
       // save scroll position before changing url

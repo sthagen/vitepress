@@ -2,6 +2,10 @@ body {
   padding: 0;
   margin: 0;
   background-color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -9,14 +13,11 @@ body {
 }
 
 .theme {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
   color: var(--text-color);
 }
 
-header {
+.theme header {
   position: fixed;
   top: 0;
   left: 0;
@@ -32,12 +33,12 @@ header {
 }
 
 @media screen and (max-width: 719px) {
-  header {
+  .theme header {
     padding-left: 4rem;
   }
 }
 
-aside {
+.theme aside {
   position: fixed;
   top: 0;
   left: 0;
@@ -51,18 +52,18 @@ aside {
 }
 
 @media screen and (max-width: 959px) {
-  aside {
+  .theme aside {
     width: 16.4rem;
   }
 }
 
 @media screen and (max-width: 719px) {
-  aside {
-    transition: transform .2s ease;
+  .theme aside {
+    transition: transform 0.2s ease;
     transform: translateX(-100%);
   }
 
-  aside.open {
+  .theme aside.open {
     transform: translateX(0);
   }
 }
@@ -75,18 +76,24 @@ aside {
   display: none;
 }
 
-.sidebar-mask.sidebar-open{
+.sidebar-mask.sidebar-open {
   display: block;
 }
 
-main {
+.theme main {
   margin-top: var(--header-height);
   margin-left: var(--sidebar-width);
 }
 
 @media screen and (max-width: 959px) {
-  main {
+  .theme main {
     margin-left: 16.4rem;
+  }
+}
+
+@media screen and (max-width: 719px) {
+  .theme main {
+    margin-left: 0;
   }
 }
 
@@ -155,4 +162,37 @@ ul {
 ul,
 ol {
   padding-left: 1.25em;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+}
+
+tr {
+  border-top: 1px solid #dfe2e5;
+}
+
+tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+th,
+td {
+  border: 1px solid #dfe2e5;
+  padding: 0.6em 1em;
+}
+
+blockquote {
+  margin: 1rem 0;
+  border-left: 0.2rem solid #dfe2e5;
+  padding: 0.25rem 0 0.25rem 1rem;
+  font-size: 1rem;
+  color: #999;
+}
+
+blockquote > p {
+  margin: 0;
 }
