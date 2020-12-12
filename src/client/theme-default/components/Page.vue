@@ -1,42 +1,50 @@
 <template>
-  <div class="content">
-    <slot name="top" />
-    <Content />
-    <NextAndPrevLinks />
-    <PageEdit />
-    <slot name="bottom" />
-  </div>
+  <main class="page">
+    <div class="container">
+      <slot name="top" />
+
+      <div class="content">
+        <Content />
+      </div>
+
+      <PageFooter />
+
+      <NextAndPrevLinks />
+
+      <slot name="bottom" />
+    </div>
+  </main>
 </template>
 
-<script>
+<script setup lang="ts">
+import PageFooter from './PageFooter.vue'
 import NextAndPrevLinks from './NextAndPrevLinks.vue'
-import PageEdit from './PageEdit.vue'
-export default {
-  components: { NextAndPrevLinks, PageEdit }
-}
 </script>
 
-<style>
-.content {
+<style scoped>
+.page {
+  padding-top: var(--header-height);
+}
+
+@media (min-width: 720px) {
+  .page {
+    margin-left: 16.4rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .page {
+    margin-left: 20rem;
+  }
+}
+
+.container {
   margin: 0 auto;
-  padding: 0.025rem 2.5rem 2rem;
-  /* if this is moved to a variable, add it to BuySellAds.vue */
-  max-width: 50rem;
+  padding: 0 1.5rem 4rem;
+  max-width: 48rem;
 }
 
-.content a {
-  color: var(--accent-color);
+.content {
+  padding-bottom: 1.5rem;
 }
-
-.content a:hover {
-  text-decoration: underline;
-}
-
-.content img {
-  max-width: 100%;
-}
-/*
-.content div > h1:first-child, .content div > h2:first-child {
-  margin-top: 0;
-} */
 </style>

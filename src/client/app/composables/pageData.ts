@@ -1,14 +1,11 @@
-import { inject, InjectionKey, Ref } from 'vue'
-import { PageData } from '../../../../types/shared'
+import { Ref, computed } from 'vue'
+import { PageData } from '/@types/shared'
+import { Route, useRoute } from '../router'
 
 export type PageDataRef = Ref<PageData>
 
-export const pageDataSymbol: InjectionKey<PageDataRef> = Symbol()
+export function usePageData(route?: Route) {
+  const r = route || useRoute()
 
-export function usePageData(): PageDataRef {
-  const data = inject(pageDataSymbol)
-  if (!data) {
-    throw new Error('usePageData() is called without provider.')
-  }
-  return data
+  return computed(() => r.data)
 }

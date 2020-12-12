@@ -1,19 +1,29 @@
 // exports in this file are exposed to themes and md files via 'vitepress'
-// so the user can do `import { usePageData } from 'vitepress'`
+// so the user can do `import { useRoute, useSiteData } from 'vitepress'`
+
+// generic types
+export type { Router, Route } from './router'
 
 // theme types
 export * from './theme'
 
 // composables
+export { useRouter, useRoute } from './router'
 export { useSiteData } from './composables/siteData'
-export { usePageData } from './composables/pageData'
 export { useSiteDataByRoute } from './composables/siteDataByRoute'
-export { useRouter, useRoute, Router, Route } from './router'
+export { usePageData } from './composables/pageData'
+export { useFrontmatter } from './composables/frontmatter'
+
+// utilities
+export { inBrowser, joinPath } from './utils'
 
 // components
 export { Content } from './components/Content'
 
-import _Debug from './components/Debug.vue'
 import { ComponentOptions } from 'vue'
+import _Debug from './components/Debug.vue'
 const Debug = _Debug as ComponentOptions
 export { Debug }
+
+// default theme
+export { default as defaultTheme } from '/@default-theme/index'

@@ -1,4 +1,4 @@
-// types shared between server and client.
+// types shared between server and client
 
 export interface LocaleConfig {
   lang: string
@@ -10,10 +10,10 @@ export interface LocaleConfig {
 }
 
 export interface SiteData<ThemeConfig = any> {
+  base: string
   lang: string
   title: string
   description: string
-  base: string
   head: HeadConfig[]
   themeConfig: ThemeConfig
   locales: Record<string, LocaleConfig>
@@ -24,13 +24,12 @@ export type HeadConfig =
   | [string, Record<string, string>, string]
 
 export interface PageData {
-  title: string
-  frontmatter: Record<string, any>
-  headers: Header[]
   relativePath: string
+  title: string
+  description: string
+  headers: Header[]
+  frontmatter: Record<string, any>
   lastUpdated: number
-  next?: { text: string; link: string }
-  prev?: { text: string; link: string }
 }
 
 export interface Header {

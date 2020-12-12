@@ -12,6 +12,10 @@ import {
   BuildConfig as ViteBuildOptions,
   BuildResult
 } from 'vite'
+import ora from 'ora'
+
+export const okMark = '\x1b[32m✓\x1b[0m'
+export const failMark = '\x1b[31m✖\x1b[0m'
 
 const hashRE = /\.(\w+)\.js$/
 const staticInjectMarkerRE = /\b(const _hoisted_\d+ = \/\*#__PURE__\*\/createStaticVNode)\("(.*)", (\d+)\)/g
@@ -36,7 +40,7 @@ export async function bundle(
   const root = config.root
   const userConfig = await resolveUserConfig(root)
   const resolver = createResolver(config.themeDir, userConfig)
-  const markdownToVue = createMarkdownToVueRenderFn(root)
+  const markdownToVue = createMarkdownToVueRenderFn(root, userConfig.markdown)
 
   let isClientBuild = true
   const pageToHashMap = Object.create(null)
@@ -81,10 +85,14 @@ export async function bundle(
     },
 
     generateBundle(_options, bundle) {
+      if (!isClientBuild) {
+        return
+      }
+
       // for each .md entry chunk, adjust its name to its correct path.
       for (const name in bundle) {
         const chunk = bundle[name]
-        if (isPageChunk(chunk) && isClientBuild) {
+        if (isPageChunk(chunk)) {
           // record page -> hash relations
           const hash = chunk.fileName.match(hashRE)![1]
           const pageName = chunk.fileName.replace(hashRE, '')
@@ -118,7 +126,7 @@ export async function bundle(
 
   // resolve options to pass to vite
   const { rollupInputOptions = {}, rollupOutputOptions = {} } = options
-  const viteOptions: ViteBuildOptions = {
+  const viteOptions: Partial<ViteBuildOptions> = {
     ...options,
     base: config.site.base,
     resolvers: [resolver],
@@ -137,21 +145,38 @@ export async function bundle(
     },
     rollupOutputOptions: {
       ...rollupOutputOptions,
-      chunkFileNames: `common-[hash].js`
+      chunkFileNames: (chunk) => {
+        if (/runtime-dom/.test(chunk.name)) {
+          return `framework.[hash].js`
+        }
+        return `[name].[hash].js`
+      }
     },
     silent: !process.env.DEBUG,
     minify: !process.env.DEBUG
   }
 
-  console.log('building client bundle...')
-  const clientResult = await build(viteOptions)
+  let clientResult, serverResult
 
-  console.log('building server bundle...')
-  isClientBuild = false
-  const serverResult = await ssrBuild({
-    ...viteOptions,
-    outDir: config.tempDir
+  const spinner = ora()
+  spinner.start('building client + server bundles...')
+  try {
+    ;[clientResult, serverResult] = await Promise.all([
+      build(viteOptions),
+      ssrBuild({
+        ...viteOptions,
+        outDir: config.tempDir
+      })
+    ])
+  } catch (e) {
+    spinner.stopAndPersist({
+      symbol: failMark
+    })
+    throw e
+  }
+  spinner.stopAndPersist({
+    symbol: okMark
   })
 
-  return [clientResult, serverResult, pageToHashMap]
+  return [clientResult[0], serverResult[0], pageToHashMap]
 }

@@ -22,10 +22,10 @@
 
 <style>
 .icon.outbound {
-  color: #aaa;
-  display: inline-block;
-  vertical-align: middle;
   position: relative;
   top: -1px;
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--c-text-lighter);
 }
 </style>
