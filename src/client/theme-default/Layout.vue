@@ -36,12 +36,16 @@
     <Page v-else>
       <template #top>
         <slot name="page-top-ads">
-          <CarbonAds
-            v-if="theme.carbonAds"
-            :key="'carbon' + page.relativePath"
-            :code="theme.carbonAds.carbon"
-            :placement="theme.carbonAds.placement"
-          />
+          <div
+            id="ads-container"
+            v-if="theme.carbonAds && theme.carbonAds.carbon"
+          >
+            <CarbonAds
+              :key="'carbon' + page.relativePath"
+              :code="theme.carbonAds.carbon"
+              :placement="theme.carbonAds.placement"
+            />
+          </div>
         </slot>
         <slot name="page-top" />
       </template>
@@ -76,16 +80,20 @@ import type { DefaultTheme } from './config'
 import NavBar from './components/NavBar.vue'
 import SideBar from './components/SideBar.vue'
 import Page from './components/Page.vue'
+
 const Home = defineAsyncComponent(() => import('./components/Home.vue'))
-const CarbonAds = defineAsyncComponent(
+
+const NoopComponent = () => null
+
+const CarbonAds = __CARBON__ ? defineAsyncComponent(
   () => import('./components/CarbonAds.vue')
-)
-const BuySellAds = defineAsyncComponent(
+) : NoopComponent
+const BuySellAds = __BSA__ ? defineAsyncComponent(
   () => import('./components/BuySellAds.vue')
-)
-const AlgoliaSearchBox = defineAsyncComponent(
+) : NoopComponent
+const AlgoliaSearchBox = __ALGOLIA__ ? defineAsyncComponent(
   () => import('./components/AlgoliaSearchBox.vue')
-)
+) : NoopComponent
 
 // generic state
 const route = useRoute()
@@ -150,3 +158,34 @@ const pageClasses = computed(() => {
   ]
 })
 </script>
+
+<style>
+#ads-container {
+  margin: 0 auto;
+}
+
+@media (min-width: 420px) {
+  #ads-container {
+    position: relative;
+    right: 0;
+    float: right;
+    margin: -8px -8px 24px 24px;
+    width: 146px;
+  }
+}
+
+@media (max-width: 420px) {
+  #ads-container {
+    /* Avoid layout shift */
+    height: 105px;
+  }
+}
+
+@media (min-width: 1400px) {
+  #ads-container {
+    position: fixed;
+    right: 8px;
+    bottom: 8px;
+  }
+}
+</style>
