@@ -19,7 +19,7 @@ export function createMarkdownToVueRenderFn(
   root: string,
   options: MarkdownOptions = {}
 ) {
-  const md = createMarkdownRenderer(options)
+  const md = createMarkdownRenderer(root, options)
 
   return (src: string, file: string): MarkdownCompileResult => {
     const relativePath = slash(path.relative(root, file))
@@ -112,11 +112,13 @@ const inferTitle = (frontmatter: any, content: string) => {
 }
 
 const inferDescription = (frontmatter: Record<string, any>) => {
-  if (!frontmatter.head) {
-    return ''
+  const { description, head } = frontmatter
+
+  if (description !== undefined) {
+    return description
   }
 
-  return getHeadMetaContent(frontmatter.head, 'description') || ''
+  return (head && getHeadMetaContent(head, 'description')) || ''
 }
 
 const getHeadMetaContent = (

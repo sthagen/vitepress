@@ -61,7 +61,12 @@ function getGuideSidebar() {
       children: [
         { text: 'Frontmatter', link: '/guide/frontmatter' },
         { text: 'Global Computed', link: '/guide/global-computed' },
-        { text: 'Customization', link: '/guide/customization' }
+        { text: 'Global Component', link: '/guide/global-component' },
+        { text: 'Customization', link: '/guide/customization' },
+        {
+          text: 'Differences from Vuepress',
+          link: '/guide/differences-from-vuepress'
+        }
       ]
     }
   ]

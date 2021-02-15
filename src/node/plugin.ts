@@ -24,14 +24,15 @@ const isPageChunk = (
 
 export function createVitePressPlugin(
   root: string,
-  { configPath, alias, markdown, site }: SiteConfig,
+  { configPath, alias, markdown, site, vueOptions }: SiteConfig,
   ssr = false,
   pageToHashMap?: Record<string, string>
 ): Plugin[] {
   const markdownToVue = createMarkdownToVueRenderFn(root, markdown)
 
   const vuePlugin = createVuePlugin({
-    include: [/\.vue$/, /\.md$/]
+    include: [/\.vue$/, /\.md$/],
+    ...vueOptions
   })
 
   let siteData = site
@@ -46,6 +47,9 @@ export function createVitePressPlugin(
           __CARBON__: !!site.themeConfig.carbonAds?.carbon,
           __BSA__: !!site.themeConfig.carbonAds?.custom,
           __ALGOLIA__: !!site.themeConfig.algolia
+        },
+        optimizeDeps: {
+          exclude: ['@docsearch/js']
         }
       }
     },
@@ -75,10 +79,17 @@ export function createVitePressPlugin(
         server.middlewares.use((req, res, next) => {
           if (req.url!.endsWith('.html')) {
             res.statusCode = 200
-            res.end(
-              `<div id="app"></div>\n` +
-                `<script type="module" src="/@fs/${APP_PATH}/index.js"></script>`
-            )
+            res.end(`
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/@fs/${APP_PATH}/index.js"></script>
+  </body>
+</html>`)
             return
           }
           next()
